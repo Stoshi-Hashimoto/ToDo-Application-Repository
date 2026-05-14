@@ -1,0 +1,527 @@
+.calendarPage {
+  min-height: calc(100vh - 70px);
+  background: #0f1115;
+  color: #f5f7fa;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.pageSubtitle {
+  margin: 8px 0 0;
+  color: #9aa4b2;
+  font-size: 14px;
+}
+
+.statusArea {
+  display: flex;
+  align-items: center;
+}
+
+.statusMessage {
+  font-size: 13px;
+  color: #b9c2cf;
+  background: #171b22;
+  border: 1px solid #293241;
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+.errorBox {
+  margin: 0 0 16px;
+  padding: 12px;
+  background: #2a1115;
+  color: #ffb4b4;
+  border: 1px solid #7a2833;
+  border-radius: 8px;
+  white-space: pre-wrap;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.toolbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.toolbarButton {
+  border: 1px solid #2b3542;
+  background: #171b22;
+  color: #f5f7fa;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toolbarButton:hover {
+  background: #1d2330;
+}
+
+.toolbarButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toolbarButton.secondary {
+  font-weight: 600;
+}
+
+.iconButton {
+  width: 40px;
+  padding: 10px 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.monthLabel {
+  margin: 0 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.calendarWrapper {
+  border: 1px solid #293241;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #11151b;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.weekHeader {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  background: #151a21;
+  border-bottom: 1px solid #293241;
+}
+
+.weekCell {
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #aab4c3;
+  border-right: 1px solid #293241;
+}
+
+.weekCell:last-child {
+  border-right: none;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+}
+
+.dateCell {
+  min-height: 0;
+  border-right: 1px solid #293241;
+  border-bottom: 1px solid #293241;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  background: #0f1319;
+  cursor: pointer;
+}
+
+.dateCell:hover {
+  background: #131922;
+}
+
+.dateCell:nth-child(7n) {
+  border-right: none;
+}
+
+.dateCellHeader {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 28px;
+  margin-bottom: 8px;
+}
+
+.dateNumber {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #d7deea;
+}
+
+.dateNumber.today {
+  background: #8ab4f8;
+  color: #0f1115;
+}
+
+.otherMonth {
+  background: #0b0e13;
+}
+
+.otherMonth .dateNumber {
+  color: #667285;
+}
+
+.todoList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.moreTodos {
+  font-size: 12px;
+  color: #9aa4b2;
+  padding: 6px 8px;
+  background: #161b22;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.todoCard {
+  background: #1a2330;
+  border-left: 4px solid #4c8bf5;
+  border-radius: 8px;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.todoTime {
+  font-size: 12px;
+  color: #9fc1ff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.todoTitle {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #f5f7fa;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.todoStatus {
+  margin-top: 6px;
+  display: inline-block;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.statusNotStarted {
+  background: #27364a;
+  color: #9fc1ff;
+}
+
+.statusInProgress {
+  background: #4a391d;
+  color: #ffd37a;
+}
+
+.statusCompleted {
+  background: #1f4230;
+  color: #8fe3ae;
+}
+
+.statusOther {
+  background: #343946;
+  color: #d0d7e2;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 520px;
+  background: #171b22;
+  border: 1px solid #293241;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.modalTitle {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.modalSubtitle {
+  margin: 0 0 16px;
+  font-size: 13px;
+  color: #9aa4b2;
+}
+
+.modalTabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #2b3542;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: transparent;
+  color: #9aa4b2;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.tabButton:hover {
+  color: #d7deea;
+}
+
+.tabButton.tabButtonActive {
+  color: #4c8bf5;
+  border-bottom-color: #4c8bf5;
+}
+
+.tabContent {
+  min-height: 200px;
+  margin-bottom: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.formLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d7deea;
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  border: 1px solid #2b3542;
+  background: #0f1319;
+  color: #f5f7fa;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+  border-color: #4c8bf5;
+}
+
+.submitError {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  background: #2a1115;
+  color: #ffb4b4;
+  border: 1px solid #7a2833;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.todoListContainer {
+  width: 100%;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #9aa4b2;
+  padding: 20px;
+  font-size: 14px;
+}
+
+.todoListItems {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.todoListItem {
+  background: #0f1319;
+  border: 1px solid #2b3542;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.todoListItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.todoListItemMeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.todoListItemTime {
+  font-size: 12px;
+  color: #9fc1ff;
+}
+
+.todoListItemStatus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+
+.todoListItemTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #f5f7fa;
+  margin-bottom: 4px;
+  word-break: break-word;
+}
+
+.todoListItemDescription {
+  font-size: 12px;
+  color: #9aa4b2;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.todoListItemActions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.actionButton {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.actionButton:hover {
+  opacity: 0.9;
+}
+
+.editButton {
+  background: #1f2f50;
+  color: #8fb3ff;
+  border-color: #2f4f80;
+}
+
+.deleteButton {
+  background: #2b181f;
+  color: #ff9fa3;
+  border-color: #5f2b34;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@media (max-width: 1100px) {
+  .dateCell {
+    min-height: 120px;
+  }
+}
+
+@media (max-width: 900px) {
+  .calendarPage {
+    padding: 16px;
+  }
+
+  .monthLabel {
+    font-size: 20px;
+  }
+
+  .dateCell {
+    min-height: 110px;
+    padding: 6px;
+  }
+
+  .todoTitle {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  .calendarWrapper {
+    overflow-x: auto;
+  }
+
+  .weekHeader,
+  .calendarGrid {
+    min-width: 900px;
+  }
+}

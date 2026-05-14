@@ -1,0 +1,54 @@
+.siteHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #4f7aee;
+  color: #f5f7f5;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #374151;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-weight: 700;
+}
+
+.todayTask {
+  font-size: 14px;
+  color: #f5f7fa;
+  white-space: nowrap;
+}
+
+.userName {
+  font-size: 14px;
+  color: #f5f7fa;
+}
+
+.signOutButton {
+  border: none;
+  background-color: #ffffff;
+  color: #4f7aee;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.signOutButton:hover {
+  background-color: #e5e7eb;
+}

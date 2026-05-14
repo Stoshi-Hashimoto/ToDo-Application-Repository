@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type TokenResponse = {
@@ -12,7 +12,7 @@ type TokenResponse = {
   error_description?: string; // A human-readable description of the error
 };
 
-export default function CallbackPage() {
+function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const processedRef = useRef(false);
@@ -140,5 +140,15 @@ export default function CallbackPage() {
         </pre>
       )}
     </main>
+  );
+}
+
+export default function CallbackPage() {
+  return (
+    <Suspense
+      fallback={<main style={{ padding: "24px" }}>読み込み中です...</main>}
+    >
+      <CallbackContent />
+    </Suspense>
   );
 }

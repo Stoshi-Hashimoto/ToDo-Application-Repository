@@ -1,0 +1,599 @@
+.workspaceMain {
+  min-height: calc(100vh - 70px);
+  background:
+    radial-gradient(
+      circle at 58% 30%,
+      rgba(41, 88, 160, 0.22),
+      transparent 36%
+    ),
+    linear-gradient(135deg, #07111f 0%, #0b1729 48%, #06101d 100%);
+  color: #ffffff;
+  padding: 32px;
+  box-sizing: border-box;
+}
+
+.workspaceLayout {
+  display: grid;
+  grid-template-columns: 390px 1fr;
+  gap: 28px;
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.taskPanel,
+.currentTaskArea,
+.memoPanel,
+.historyPanel {
+  border: 1px solid rgba(126, 157, 205, 0.25);
+  background: rgba(8, 19, 35, 0.78);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.24),
+    inset 0 0 30px rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+
+.taskPanel {
+  min-height: 820px;
+  padding: 22px 20px;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.panelHeader h2,
+.historyHeader h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.panelHeader p {
+  margin: 10px 0 0;
+  color: #9ba9bd;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.addTaskButton,
+.historyHeader button {
+  border: 1px solid rgba(94, 143, 229, 0.55);
+  background: rgba(37, 91, 184, 0.48);
+  color: #ffffff;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.taskFilters {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.taskFilters button {
+  height: 38px;
+  border: 1px solid rgba(126, 157, 205, 0.17);
+  background: rgba(7, 17, 31, 0.55);
+  color: #95a5bd;
+  border-radius: 7px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.taskFilters button.active {
+  background: linear-gradient(135deg, #326cd0, #2757b3);
+  color: #ffffff;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.taskCard {
+  width: 100%;
+  min-height: 112px;
+  text-align: left;
+  border: 1px solid rgba(126, 157, 205, 0.18);
+  background: rgba(9, 22, 40, 0.72);
+  color: #ffffff;
+  border-radius: 9px;
+  padding: 18px;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.taskCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(82, 132, 221, 0.55);
+}
+
+.taskCard.selected {
+  border-color: rgba(69, 129, 238, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(69, 129, 238, 0.42),
+    0 0 28px rgba(61, 116, 214, 0.22);
+}
+
+.taskCardTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.taskCardTop strong {
+  font-size: 17px;
+  flex: 1;
+}
+
+.taskRadio {
+  width: 15px;
+  height: 15px;
+  border: 2px solid #85a3d5;
+  border-radius: 50%;
+}
+
+.taskCard.selected .taskRadio {
+  border-color: #4080ec;
+  box-shadow: inset 0 0 0 3px #081527;
+  background: #4080ec;
+}
+
+.statusBadge {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 9px;
+  border-radius: 5px;
+}
+
+.notStarted {
+  background: rgba(137, 151, 171, 0.3);
+  color: #d3dae6;
+}
+
+.inProgress {
+  background: rgba(38, 116, 237, 0.78);
+  color: #ffffff;
+}
+
+.done {
+  background: rgba(49, 169, 91, 0.82);
+  color: #ffffff;
+}
+
+.taskMeta {
+  margin-left: 30px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #9caac0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.priority.high,
+.priorityTag.high {
+  color: #ff575d;
+}
+
+.priority.medium,
+.priorityTag.medium {
+  color: #ffbd3d;
+}
+
+.priority.low,
+.priorityTag.low {
+  color: #4e90ff;
+}
+
+.taskHelp {
+  text-align: center;
+  color: #9ba9bd;
+  line-height: 1.8;
+  font-size: 14px;
+  margin-top: 22px;
+}
+
+.workPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.currentTaskArea {
+  padding: 24px 26px 26px;
+}
+
+.sectionLabel {
+  color: #9aa8bd;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.currentTaskInfo h1 {
+  font-size: 34px;
+  line-height: 1.2;
+  margin: 0 0 14px;
+  font-weight: 900;
+}
+
+.currentTaskMeta {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+  color: #a2aec2;
+  font-weight: 700;
+}
+
+.priorityTag {
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  padding: 6px 10px;
+}
+
+.timerAndActions {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  align-items: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.stopwatchArea {
+  position: relative;
+  width: 330px;
+  height: 330px;
+  margin: 0 auto;
+}
+
+.stopwatchCircle {
+  position: absolute;
+  inset: 30px 0 0 0;
+  width: 330px;
+  height: 330px;
+  border: 6px solid #416fc4;
+  border-radius: 50%;
+  background: rgba(5, 14, 26, 0.35);
+  box-shadow:
+    0 0 35px rgba(54, 111, 208, 0.24),
+    inset 0 0 45px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stopwatchTopButton {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 45px;
+  height: 25px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #4f83de, #315ba2);
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.stopwatchTopButton::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -20px;
+  width: 29px;
+  height: 20px;
+  transform: translateX(-50%);
+  background: #315ba2;
+}
+
+.stopwatchSideButton {
+  position: absolute;
+  top: 78px;
+  right: 0;
+  width: 54px;
+  height: 22px;
+  background: linear-gradient(180deg, #4f83de, #315ba2);
+  border-radius: 6px;
+  transform: rotate(45deg);
+  z-index: 2;
+}
+
+.elapsedLabel {
+  color: #9aa9c3;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.timeDisplay {
+  font-size: 52px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.timeLabels {
+  width: 180px;
+  display: flex;
+  justify-content: space-between;
+  color: #6f94d9;
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 16px;
+}
+
+.actionArea {
+  border-left: 1px solid rgba(126, 157, 205, 0.18);
+  padding-left: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statusBox {
+  border: 1px solid rgba(126, 157, 205, 0.18);
+  border-radius: 9px;
+  padding: 18px 20px;
+  background: rgba(7, 17, 31, 0.45);
+}
+
+.statusBox span {
+  display: block;
+  color: #96a6bd;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.statusBox strong {
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.mainActionButton {
+  height: 66px;
+  border: none;
+  border-radius: 7px;
+  color: #ffffff;
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.24);
+}
+
+.startButton,
+.pauseButton {
+  background: linear-gradient(135deg, #3f76da, #2f5fc0);
+}
+
+.endButton {
+  background: linear-gradient(135deg, #c8202d, #9d1b25);
+}
+
+.resetButton {
+  height: 46px;
+  border: 1px solid rgba(126, 157, 205, 0.25);
+  border-radius: 7px;
+  background: rgba(7, 17, 31, 0.45);
+  color: #dce7ff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.memoPanel {
+  padding: 18px 20px;
+}
+
+.memoHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.memoHeader label {
+  font-weight: 800;
+}
+
+.memoHeader span {
+  color: #94a4ba;
+  font-size: 14px;
+}
+
+.memoPanel textarea {
+  width: 100%;
+  height: 100px;
+  resize: vertical;
+  border: 1px solid rgba(126, 157, 205, 0.22);
+  background: rgba(7, 17, 31, 0.6);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 15px;
+}
+
+.memoPanel textarea::placeholder {
+  color: #7d8ca4;
+}
+
+.memoPanel p {
+  margin: 10px 0 0;
+  color: #9aa8bd;
+  font-size: 14px;
+}
+
+.historyPanel {
+  padding: 20px;
+}
+
+.historyHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.historyPanel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.historyPanel th {
+  color: #8fa0b7;
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(126, 157, 205, 0.2);
+}
+
+.historyPanel td {
+  color: #eef4ff;
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(126, 157, 205, 0.13);
+}
+
+.totalTime {
+  margin: 16px 0 0;
+  color: #9aa8bd;
+  font-weight: 700;
+}
+
+/* モーダル関連スタイル */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 520px;
+  background: #171b22;
+  border: 1px solid #293241;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.modalTitle {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.tabContent {
+  min-height: 200px;
+  margin-bottom: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* フォーム関連スタイル */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.formLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #d7deea;
+}
+
+.formInput,
+.formTextarea {
+  width: 100%;
+  border: 1px solid #2b3542;
+  background: #0f1319;
+  color: #f5f7fa;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+
+.formInput:focus,
+.formTextarea:focus {
+  border-color: #4c8bf5;
+}
+
+.submitError {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  background: #2a1115;
+  color: #ffb4b4;
+  border: 1px solid #7a2833;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+/* モーダルアクション */
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.toolbarButton {
+  border: 1px solid #2b3542;
+  background: #171b22;
+  color: #f5f7fa;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toolbarButton:hover {
+  background: #1d2330;
+}
+
+.toolbarButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toolbarButton.secondary {
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .workspaceLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .taskPanel {
+    min-height: auto;
+  }
+
+  .timerAndActions {
+    grid-template-columns: 1fr;
+  }
+
+  .actionArea {
+    border-left: none;
+    padding-left: 0;
+  }
+}

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,7 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+      <body style={{ margin: 0, padding: 0, paddingTop: "70px" }}>
+        <Header first_name="太郎" last_name="鈴木" Todos={[]} />
+        <div style={{ display: "flex", minHeight: "100vh" }}>
+          <Sidebar />
+          <div style={{ marginLeft: "250px", width: "calc(100% - 250px)" }}>
+            <main>{children}</main>
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
