@@ -1,5 +1,12 @@
+.workspacePage {
+  height: calc(100vh - 70px);
+  overflow: hidden;
+}
+
 .workspaceMain {
-  min-height: calc(100vh - 70px);
+  height: 100%;
+  overflow: hidden;
+
   background:
     radial-gradient(
       circle at 58% 30%,
@@ -7,6 +14,7 @@
       transparent 36%
     ),
     linear-gradient(135deg, #07111f 0%, #0b1729 48%, #06101d 100%);
+
   color: #ffffff;
   padding: 32px;
   box-sizing: border-box;
@@ -97,6 +105,9 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  max-height: 550px;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 .taskCard {
@@ -208,6 +219,7 @@
 }
 
 .workPanel {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -247,7 +259,7 @@
 .timerAndActions {
   display: grid;
   grid-template-columns: 1fr 340px;
-  align-items: center;
+  align-items: flex-start;
   gap: 32px;
   margin-top: 24px;
 }
@@ -255,7 +267,7 @@
 .stopwatchArea {
   position: relative;
   width: 330px;
-  height: 330px;
+  height: 350px;
   margin: 0 auto;
 }
 
@@ -364,7 +376,7 @@
 }
 
 .mainActionButton {
-  height: 66px;
+  height: 65px;
   border: none;
   border-radius: 7px;
   color: #ffffff;
@@ -381,16 +393,6 @@
 
 .endButton {
   background: linear-gradient(135deg, #c8202d, #9d1b25);
-}
-
-.resetButton {
-  height: 46px;
-  border: 1px solid rgba(126, 157, 205, 0.25);
-  border-radius: 7px;
-  background: rgba(7, 17, 31, 0.45);
-  color: #dce7ff;
-  font-weight: 800;
-  cursor: pointer;
 }
 
 .memoPanel {
@@ -486,10 +488,11 @@
 
 .modalContent {
   width: 100%;
-  max-width: 520px;
-  background: #171b22;
-  border: 1px solid #293241;
+  max-width: 820px;
+  background: #071527;
+  border: 1px solid #27476f;
   border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
   padding: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
@@ -596,4 +599,93 @@
     border-left: none;
     padding-left: 0;
   }
+}
+
+.historyModalOverlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(2, 6, 23, 0.72);
+  backdrop-filter: blur(6px);
+
+  z-index: 1000;
+}
+
+.historyModalContent {
+  position: absolute;
+
+  top: 70px;
+  left: 470px;
+  right: 32px;
+  bottom: 32px;
+
+  background: #071527;
+  border: 1px solid #27476f;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+
+  color: #f8fafc;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.historyModalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 24px;
+  border-bottom: 1px solid #1e3a5f;
+}
+
+.historyModalHeader h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.historyModalCloseButton {
+  border: 1px solid #315987;
+  background: #10233c;
+  color: #dbeafe;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.historyModalCloseButton:hover {
+  background: #1d4ed8;
+}
+
+.historyModalBody {
+  flex: 1;
+  padding: 16px 24px 24px;
+  overflow-y: auto;
+}
+
+.historyModalTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historyModalTable th {
+  color: #93a4bc;
+  font-size: 13px;
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid #243b5a;
+}
+
+.historyModalTable td {
+  padding: 14px 8px;
+  border-bottom: 1px solid #152a44;
+  color: #e5e7eb;
+  font-size: 14px;
+}
+
+.historyModalTable tr:hover {
+  background: rgba(59, 130, 246, 0.08);
 }

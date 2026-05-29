@@ -143,7 +143,7 @@
 }
 
 .dateCell {
-  min-height: 0;
+  height: 160px;
   border-right: 1px solid #293241;
   border-bottom: 1px solid #293241;
   padding: 8px;
@@ -151,6 +151,7 @@
   flex-direction: column;
   background: #0f1319;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .dateCell:hover {
@@ -465,7 +466,9 @@
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
 }
 
 .actionButton:hover {

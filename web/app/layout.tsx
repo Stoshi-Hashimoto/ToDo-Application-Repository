@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body style={{ margin: 0, padding: 0, paddingTop: "70px" }}>
-        <Header first_name="太郎" last_name="鈴木" Todos={[]} />
+        <Header Todos={[]} />
         <div style={{ display: "flex", minHeight: "100vh" }}>
           <Sidebar />
           <div style={{ marginLeft: "250px", width: "calc(100% - 250px)" }}>
