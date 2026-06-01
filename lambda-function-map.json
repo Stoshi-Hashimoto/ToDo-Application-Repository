@@ -4,9 +4,9 @@
   "lambda/todos/insert": "todo-create",
   "lambda/todos/update": "todo-update",
   "lambda/todos/delete": "todo-delete",
-  "lambda/work-sessions/start": "todo-work-session-start",
-  "lambda/work-sessions/end": "todo-work-session-end",
-  "lambda/work-sessions/get": "todo-work-session-get",
+  "lambda/work-sessions/start": "worksession-start",
+  "lambda/work-sessions/end": "worksession-end",
+  "lambda/work-sessions/get": "worksession-get",
   "lambda/work-notes/get": "worknote-get",
   "lambda/work-notes/regist": "worknote-regist"
 }
