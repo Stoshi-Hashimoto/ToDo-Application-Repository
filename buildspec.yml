@@ -9,6 +9,12 @@ env:
     ECS_SERVICE_NAME: "todo-front-task-service-01aeci1v"
     IMAGE_TAG: "latest"
 
+  parameter-store:
+    NEXT_PUBLIC_API_BASE: "/todo/prod/NEXT_PUBLIC_API_BASE"
+    NEXT_PUBLIC_COGNITO_DOMAIN: "/todo/prod/NEXT_PUBLIC_COGNITO_DOMAIN"
+    NEXT_PUBLIC_COGNITO_CLIENT_ID: "/todo/prod/NEXT_PUBLIC_COGNITO_CLIENT_ID"
+    NEXT_PUBLIC_COGNITO_REDIRECT_URI: "/todo/prod/NEXT_PUBLIC_COGNITO_REDIRECT_URI"
+
 phases:
   pre_build:
     commands:
