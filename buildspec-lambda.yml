@@ -1,0 +1,52 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_DEFAULT_REGION: "ap-northeast-1"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "Install jq and zip..."
+      - yum install -y jq zip
+
+  build:
+    commands:
+      - echo "Deploy Lambda functions..."
+      - |
+        for LAMBDA_DIR in $(jq -r 'keys[]' lambda-function-map.json); do
+          FUNCTION_NAME=$(jq -r --arg dir "$LAMBDA_DIR" '.[$dir]' lambda-function-map.json)
+
+          echo "----------------------------------------"
+          echo "Lambda directory: $LAMBDA_DIR"
+          echo "Function name: $FUNCTION_NAME"
+
+          if [ ! -d "$LAMBDA_DIR" ]; then
+            echo "Skip: directory not found: $LAMBDA_DIR"
+            continue
+          fi
+
+          cd "$LAMBDA_DIR"
+
+          if [ -f package.json ]; then
+            echo "Install production dependencies..."
+            npm ci --omit=dev
+          fi
+
+          echo "Create zip..."
+          rm -f function.zip
+          zip -r function.zip . -x "*.git*" "*.env*" "node_modules/.cache/*"
+
+          echo "Update Lambda function code..."
+          aws lambda update-function-code \
+            --function-name "$FUNCTION_NAME" \
+            --zip-file fileb://function.zip
+
+          cd "$CODEBUILD_SRC_DIR"
+        done
+
+  post_build:
+    commands:
+      - echo "Lambda deployment completed."
