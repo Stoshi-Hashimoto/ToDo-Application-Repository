@@ -1,3 +1,6 @@
+/**
+ * 作業メモ取得API
+ */
 const { Client } = require("pg");
 
 exports.handler = async (event) => {

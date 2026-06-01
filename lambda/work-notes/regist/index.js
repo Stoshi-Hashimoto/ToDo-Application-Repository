@@ -1,3 +1,6 @@
+/**
+ * 作業メモ登録API
+ */
 const { Client } = require("pg");
 
 exports.handler = async (event) => {
