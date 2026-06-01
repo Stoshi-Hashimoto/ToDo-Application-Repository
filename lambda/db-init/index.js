@@ -57,6 +57,49 @@ exports.handler = async () => {
     console.log("todos table created");
 
     await client.query(`
+      CREATE TABLE IF NOT EXISTS todo_work_sessions (
+        id BIGSERIAL PRIMARY KEY,
+
+        todo_id BIGINT NOT NULL,
+
+        started_at TIMESTAMP NOT NULL,
+        ended_at TIMESTAMP,
+
+        duration_seconds INTEGER,
+
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+        CONSTRAINT fk_work_sessions_todo
+          FOREIGN KEY (todo_id)
+          REFERENCES todos(id)
+          ON DELETE CASCADE
+      );
+    `);
+
+    console.log("todo_work_sessions table created");
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS todo_work_notes (
+        id BIGSERIAL PRIMARY KEY,
+
+        work_session_id BIGINT NOT NULL,
+
+        note TEXT NOT NULL,
+
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+        CONSTRAINT fk_work_notes_session
+          FOREIGN KEY (work_session_id)
+          REFERENCES todo_work_sessions(id)
+          ON DELETE CASCADE
+      );
+    `);
+
+    console.log("todo_work_notes table created");
+
+    await client.query(`
       CREATE INDEX IF NOT EXISTS idx_todos_user_id ON todos(user_id);
     `);
 
@@ -66,6 +109,21 @@ exports.handler = async () => {
 
     await client.query(`
       CREATE INDEX IF NOT EXISTS idx_todos_status ON todos(status);
+    `);
+
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_work_sessions_todo_id
+      ON todo_work_sessions(todo_id);
+    `);
+
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_work_sessions_started_at
+      ON todo_work_sessions(started_at);
+    `);
+
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_work_notes_session_id
+      ON todo_work_notes(work_session_id);
     `);
 
     console.log("indexes created");

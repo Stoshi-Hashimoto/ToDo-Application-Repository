@@ -58,15 +58,18 @@ exports.handler = async (event) => {
     await client.connect();
 
     const result = await client.query(
-      `UPDATE todos 
-      SET title = $1,
-      description = $2,
-      due_at = $3,
-      status = $4,
-      updated_at = CURRENT_TIMESTAMP
-      WHERE id = $5 AND deleted_at IS NULL
+      `
+      UPDATE todos 
+      SET
+        title = $1,
+        description = $2,
+        due_at = ($3::timestamp AT TIME ZONE 'Asia/Tokyo'),
+        status = $4,
+        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
+      WHERE id = $5
+        AND deleted_at IS NULL
       RETURNING *
-    `,
+      `,
       [title, description || null, due_at || null, status || "NOT_STARTED", id],
     );
 

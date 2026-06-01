@@ -45,18 +45,22 @@ exports.handler = async (event) => {
         title,
         description,
         due_at,
-        status
+        status,
+        created_at,
+        updated_at
       )
-      VALUES ($1, $2, $3, $4, $5)
+      VALUES (
+        $1,
+        $2,
+        $3,
+        ($4::timestamp AT TIME ZONE 'Asia/Tokyo'),
+        $5,
+        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
+        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
+      )
       RETURNING *;
       `,
-      [
-        1, // 仮でテストユーザーID固定
-        title.trim(),
-        description,
-        dueAt,
-        "NOT_STARTED",
-      ],
+      [1, title.trim(), description, dueAt, "NOT_STARTED"],
     );
 
     console.log("after insert");
