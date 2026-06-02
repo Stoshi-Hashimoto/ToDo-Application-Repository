@@ -1,4 +1,10 @@
 const { Client } = require("pg");
+const { getDbConfig } = require("./ssm");
+
+const corsHeaders = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+};
 
 exports.handler = async (event) => {
   console.log("event:", JSON.stringify(event));
@@ -8,10 +14,7 @@ exports.handler = async (event) => {
   if (!id) {
     return {
       statusCode: 400,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Invalid request" }),
     };
   }
@@ -22,10 +25,7 @@ exports.handler = async (event) => {
   } catch (error) {
     return {
       statusCode: 400,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Invalid JSON in request body" }),
     };
   }
@@ -35,24 +35,13 @@ exports.handler = async (event) => {
   if (!title) {
     return {
       statusCode: 400,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ message: "Title is required" }),
     };
   }
 
-  const client = new Client({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  });
+  const dbConfig = await getDbConfig();
+  const client = new Client(dbConfig);
 
   try {
     await client.connect();
@@ -76,20 +65,14 @@ exports.handler = async (event) => {
     if (result.rows.length === 0) {
       return {
         statusCode: 404,
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
+        headers: corsHeaders,
         body: JSON.stringify({ message: "Todo not found or already deleted" }),
       };
     }
 
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
         message: "todo updated",
         todo: result.rows[0],
@@ -97,12 +80,10 @@ exports.handler = async (event) => {
     };
   } catch (error) {
     console.error("Error updating todo:", error);
+
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
         message: "failed to update todo",
         error: error.message,
