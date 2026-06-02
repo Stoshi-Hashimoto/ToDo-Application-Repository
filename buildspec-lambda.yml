@@ -28,6 +28,7 @@ phases:
             continue
           fi
 
+          cp lambda/common/ssm.js "$LAMBDA_DIR/ssm.js"
           cd "$LAMBDA_DIR"
 
           if [ -f package.json ]; then
