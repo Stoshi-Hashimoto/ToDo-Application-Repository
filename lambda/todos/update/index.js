@@ -40,11 +40,16 @@ exports.handler = async (event) => {
     };
   }
 
+  console.log("BEFORE getDbConfig");
   const dbConfig = await getDbConfig();
+  console.log("AFTER getDbConfig");
+
   const client = new Client(dbConfig);
 
   try {
+    console.log("BEFORE DB CONNECT");
     await client.connect();
+    console.log("AFTER DB CONNECT");
 
     const result = await client.query(
       `

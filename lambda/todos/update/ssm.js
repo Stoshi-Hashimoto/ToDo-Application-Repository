@@ -5,7 +5,9 @@ const ssm = new SSMClient({ region: "ap-northeast-1" });
 let cachedDbConfig = null;
 
 async function getDbConfig() {
+  console.log("SSM START");
   if (cachedDbConfig) {
+    console.log("CACHE HIT");
     return cachedDbConfig;
   }
 
@@ -20,7 +22,11 @@ async function getDbConfig() {
     WithDecryption: true,
   });
 
+  console.log("BEFORE SSM SEND");
+
   const response = await ssm.send(command);
+
+  console.log("AFTER SSM SEND");
 
   const params = {};
   for (const param of response.Parameters) {
