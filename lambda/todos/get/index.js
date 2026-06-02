@@ -1,4 +1,5 @@
 const { Client } = require("pg");
+const { getDbConfig } = require("./ssm");
 
 exports.handler = async (event) => {
   console.log("event:", JSON.stringify(event));
@@ -16,19 +17,16 @@ exports.handler = async (event) => {
     };
   }
 
-  const client = new Client({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  });
+  console.log("BEFORE getDbConfig");
+  const dbConfig = await getDbConfig();
+  console.log("AFTER getDbConfig");
+
+  const client = new Client(dbConfig);
 
   try {
+    console.log("BEFORE DB CONNECT");
     await client.connect();
+    console.log("AFTER DB CONNECT");
 
     const result = await client.query(
       `SELECT * FROM todos WHERE id = $1 AND deleted_at IS NULL`,

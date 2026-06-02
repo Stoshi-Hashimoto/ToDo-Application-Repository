@@ -11,7 +11,7 @@ export default function Sidebar() {
 
           <li className={styles.sidebarItem}>
             <a href="/todos" className={styles.sidebarLink}>
-              📅 作業カレンダー
+              📅 タスクカレンダー
             </a>
           </li>
           <li className={styles.sidebarItem}>

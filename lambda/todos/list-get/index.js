@@ -1,34 +1,43 @@
 const { Pool } = require("pg");
+const { getDbConfig } = require("./ssm");
 
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT || 5432),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  max: 1,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+const headers = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+};
+
+let pool;
+
+async function getPool() {
+  if (pool) {
+    return pool;
+  }
+
+  console.log("BEFORE getDbConfig");
+  const dbConfig = await getDbConfig();
+  console.log("AFTER getDbConfig");
+
+  pool = new Pool({
+    ...dbConfig,
+    max: 1,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
+  });
+
+  return pool;
+}
 
 exports.handler = async (event) => {
   console.log("event:", JSON.stringify(event));
-  console.log("env check:", {
-    DB_HOST: process.env.DB_HOST,
-    DB_PORT: process.env.DB_PORT,
-    DB_NAME: process.env.DB_NAME,
-    DB_USER: process.env.DB_USER,
-    DB_PASSWORD_EXISTS: !!process.env.DB_PASSWORD,
-  });
 
   let client;
 
   try {
-    client = await pool.connect();
-    console.log("db connected");
+    const dbPool = await getPool();
+
+    console.log("BEFORE DB CONNECT");
+    client = await dbPool.connect();
+    console.log("AFTER DB CONNECT");
 
     const userId = 1;
 
@@ -56,10 +65,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers,
       body: JSON.stringify({
         message: "todos fetched",
         todos: result.rows,
@@ -67,15 +73,10 @@ exports.handler = async (event) => {
     };
   } catch (error) {
     console.error("lambda error:", error);
-    console.error("lambda error message:", error.message);
-    console.error("lambda error stack:", error.stack);
 
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers,
       body: JSON.stringify({
         message: "internal server error",
         error: error.message,

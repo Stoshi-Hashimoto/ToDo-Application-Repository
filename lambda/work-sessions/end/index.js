@@ -1,4 +1,5 @@
 const { Client } = require("pg");
+const { getDbConfig } = require("./ssm");
 
 exports.handler = async (event) => {
   console.log("event:", JSON.stringify(event));
@@ -29,32 +30,29 @@ exports.handler = async (event) => {
     };
   }
 
-  const client = new Client({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  });
+  console.log("BEFORE getDbConfig");
+  const dbConfig = await getDbConfig();
+  console.log("AFTER getDbConfig");
+
+  const client = new Client(dbConfig);
 
   try {
+    console.log("BEFORE DB CONNECT");
     await client.connect();
+    console.log("AFTER DB CONNECT");
 
     await client.query("BEGIN");
 
     const updateSql = `
       UPDATE todo_work_sessions
       SET
-        ended_at = CURRENT_TIMESTAMP,
+        ended_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
         duration_seconds = EXTRACT(
           EPOCH FROM (
-            CURRENT_TIMESTAMP - started_at
+            (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo') - started_at
           )
         )::INTEGER,
-        updated_at = CURRENT_TIMESTAMP
+        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
       WHERE todo_id = $1
         AND ended_at IS NULL
       RETURNING *
@@ -78,7 +76,7 @@ exports.handler = async (event) => {
       UPDATE todos
       SET
         status = 'DONE',
-        updated_at = CURRENT_TIMESTAMP
+        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
       WHERE id = $1
         AND deleted_at IS NULL
       RETURNING *
@@ -109,7 +107,7 @@ exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    await client.query("ROLLBACK");
+    await client.query("ROLLBACK").catch(() => {});
     console.error("Error ending work session:", error);
 
     return {

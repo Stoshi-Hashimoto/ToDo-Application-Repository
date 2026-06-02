@@ -1,4 +1,5 @@
 const { Client } = require("pg");
+const { getDbConfig } = require("./ssm");
 
 exports.handler = async (event) => {
   console.log("event:", JSON.stringify(event));
@@ -25,19 +26,16 @@ exports.handler = async (event) => {
     };
   }
 
-  const client = new Client({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  });
+  console.log("BEFORE getDbConfig");
+  const dbConfig = await getDbConfig();
+  console.log("AFTER getDbConfig");
+
+  const client = new Client(dbConfig);
 
   try {
+    console.log("BEFORE DB CONNECT");
     await client.connect();
+    console.log("AFTER DB CONNECT");
 
     await client.query("BEGIN");
 
@@ -69,9 +67,9 @@ exports.handler = async (event) => {
       )
       VALUES (
         $1,
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP,
-        CURRENT_TIMESTAMP
+        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
+        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
+        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
       )
       RETURNING *
     `;
@@ -83,7 +81,7 @@ exports.handler = async (event) => {
       UPDATE todos
       SET
         status = 'IN_PROGRESS',
-        updated_at = CURRENT_TIMESTAMP
+        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
       WHERE id = $1
         AND deleted_at IS NULL
       RETURNING *
@@ -92,7 +90,7 @@ exports.handler = async (event) => {
     );
 
     if (updateTodoResult.rows.length === 0) {
-      await client.query("ROLLBACK");
+      await client.query("ROLLBACK").catch(() => {});
 
       return {
         statusCode: 404,
@@ -113,7 +111,7 @@ exports.handler = async (event) => {
       }),
     };
   } catch (error) {
-    await client.query("ROLLBACK");
+    await client.query("ROLLBACK").catch(() => {});
     console.error("Error starting work session:", error);
 
     return {

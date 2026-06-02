@@ -1,4 +1,10 @@
 const { Client } = require("pg");
+const { getDbConfig } = require("./ssm");
+
+const headers = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+};
 
 exports.handler = async (event) => {
   let client;
@@ -14,29 +20,22 @@ exports.handler = async (event) => {
     if (!title || typeof title !== "string" || title.trim() === "") {
       return {
         statusCode: 400,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers,
         body: JSON.stringify({
           message: "title is required",
         }),
       };
     }
 
-    client = new Client({
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    });
+    console.log("BEFORE getDbConfig");
+    const dbConfig = await getDbConfig();
+    console.log("AFTER getDbConfig");
 
-    console.log("before connect");
+    client = new Client(dbConfig);
+
+    console.log("BEFORE DB CONNECT");
     await client.connect();
-    console.log("after connect");
+    console.log("AFTER DB CONNECT");
 
     const result = await client.query(
       `
@@ -63,13 +62,9 @@ exports.handler = async (event) => {
       [1, title.trim(), description, dueAt, "NOT_STARTED"],
     );
 
-    console.log("after insert");
-
     return {
       statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({
         message: "todo created",
         todo: result.rows[0],
@@ -80,9 +75,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 500,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({
         message: "internal server error",
         error: error.message,

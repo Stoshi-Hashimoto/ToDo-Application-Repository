@@ -1,21 +1,19 @@
 const { Client } = require("pg");
+const { getDbConfig } = require("./ssm");
 
 exports.handler = async (event) => {
   console.log("event:", JSON.stringify(event));
 
-  const client = new Client({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT || 5432),
-    database: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  });
+  console.log("BEFORE getDbConfig");
+  const dbConfig = await getDbConfig();
+  console.log("AFTER getDbConfig");
+
+  const client = new Client(dbConfig);
 
   try {
+    console.log("BEFORE DB CONNECT");
     await client.connect();
+    console.log("AFTER DB CONNECT");
 
     const sql = `
       SELECT
@@ -30,7 +28,7 @@ exports.handler = async (event) => {
       LEFT JOIN todo_work_notes wn
         ON wn.work_session_id = ws.id
       WHERE
-        date_trunc('month', ws.started_at AT TIME ZONE 'Asia/Tokyo') =
+        date_trunc('month', ws.started_at) =
         date_trunc('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo')
       ORDER BY ws.started_at DESC
     `;
