@@ -16,6 +16,7 @@ phases:
     commands:
       - echo "Deploy Lambda functions..."
       - |
+        set -e
         for LAMBDA_DIR in $(jq -r 'keys[]' lambda-function-map.json); do
           FUNCTION_NAME=$(jq -r --arg dir "$LAMBDA_DIR" '.[$dir]' lambda-function-map.json)
 
