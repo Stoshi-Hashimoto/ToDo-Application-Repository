@@ -21,6 +21,7 @@ exports.handler = async (event) => {
         t.title AS task_name,
         ws.started_at,
         ws.ended_at,
+        ws.duration_seconds,
         COALESCE(wn.note, '') AS memo
       FROM todo_work_sessions ws
       INNER JOIN todos t
@@ -29,7 +30,7 @@ exports.handler = async (event) => {
         ON wn.work_session_id = ws.id
       WHERE
         date_trunc('month', ws.started_at) =
-        date_trunc('month', CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo')
+        date_trunc('month', CURRENT_TIMESTAMP)
       ORDER BY ws.started_at DESC
     `;
 
