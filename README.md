@@ -410,7 +410,7 @@ Lambda更新
 
 ### ER図
 
-![ER Diagram](docs/db/db_ER図.png)
+![ER Diagram](docs/db/db_ER.png)
 
 ### 設計ポイント
 
