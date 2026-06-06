@@ -76,7 +76,7 @@ export default function TodoFormTab({
         />
       </div>
 
-      <div className={styles.formGroup}>
+      {/* <div className={styles.formGroup}>
         <label className={styles.formLabel} htmlFor="todo-status">
           ステータス
         </label>
@@ -90,7 +90,7 @@ export default function TodoFormTab({
           <option value="IN_PROGRESS">進行中</option>
           <option value="COMPLETED">完了</option>
         </select>
-      </div>
+      </div> */}
 
       {submitError && <div className={styles.submitError}>{submitError}</div>}
     </div>

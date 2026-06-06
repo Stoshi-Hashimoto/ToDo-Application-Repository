@@ -40,6 +40,16 @@ exports.handler = async (event) => {
     };
   }
 
+  if (due_at && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(due_at)) {
+    return {
+      statusCode: 400,
+      headers: corsHeaders(),
+      body: JSON.stringify({
+        message: "期限日時は年4桁で入力してください。",
+      }),
+    };
+  }
+
   console.log("BEFORE getDbConfig");
   const dbConfig = await getDbConfig();
   console.log("AFTER getDbConfig");
@@ -57,9 +67,9 @@ exports.handler = async (event) => {
       SET
         title = $1,
         description = $2,
-        due_at = ($3::timestamp AT TIME ZONE 'Asia/Tokyo'),
+        due_at = $3::timestamp,
         status = $4,
-        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
+        updated_at = CURRENT_TIMESTAMP
       WHERE id = $5
         AND deleted_at IS NULL
       RETURNING *

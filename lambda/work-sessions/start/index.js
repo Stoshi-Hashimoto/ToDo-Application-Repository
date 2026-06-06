@@ -67,9 +67,9 @@ exports.handler = async (event) => {
       )
       VALUES (
         $1,
-        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
-        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
-        CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP
       )
       RETURNING *
     `;

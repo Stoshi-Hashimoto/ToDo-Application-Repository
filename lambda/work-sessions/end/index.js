@@ -46,13 +46,13 @@ exports.handler = async (event) => {
     const updateSql = `
       UPDATE todo_work_sessions
       SET
-        ended_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
+        ended_at = CURRENT_TIMESTAMP,
         duration_seconds = EXTRACT(
           EPOCH FROM (
-            (CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo') - started_at
+            CURRENT_TIMESTAMP - started_at
           )
         )::INTEGER,
-        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
+        updated_at = CURRENT_TIMESTAMP
       WHERE todo_id = $1
         AND ended_at IS NULL
       RETURNING *
@@ -76,7 +76,7 @@ exports.handler = async (event) => {
       UPDATE todos
       SET
         status = 'DONE',
-        updated_at = CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
+        updated_at = CURRENT_TIMESTAMP
       WHERE id = $1
         AND deleted_at IS NULL
       RETURNING *

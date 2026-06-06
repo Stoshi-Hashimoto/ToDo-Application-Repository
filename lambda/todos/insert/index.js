@@ -27,6 +27,16 @@ exports.handler = async (event) => {
       };
     }
 
+    if (dueAt && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dueAt)) {
+      return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+          message: "期限日時は年4桁で入力してください。",
+        }),
+      };
+    }
+
     console.log("BEFORE getDbConfig");
     const dbConfig = await getDbConfig();
     console.log("AFTER getDbConfig");

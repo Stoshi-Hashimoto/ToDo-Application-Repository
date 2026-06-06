@@ -87,7 +87,7 @@ export default function TodoCreateModal({
             />
           </div>
 
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <label className={styles.formLabel} htmlFor="workspace-status">
               ステータス
             </label>
@@ -101,7 +101,7 @@ export default function TodoCreateModal({
               <option value="IN_PROGRESS">進行中</option>
               <option value="DONE">完了</option>
             </select>
-          </div>
+          </div> */}
 
           {submitError && (
             <div className={styles.submitError}>{submitError}</div>

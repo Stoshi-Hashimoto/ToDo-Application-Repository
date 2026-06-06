@@ -77,7 +77,9 @@ export default function WorkSpacePage() {
 
   // 選択されているタスクを取得するためのuseMemoフック
   const selectedTask = useMemo(() => {
-    return tasks.find((task) => task.id === selectedTaskId) ?? tasks[0] ?? null;
+    if (!selectedTaskId) return null;
+
+    return tasks.find((task) => task.id === selectedTaskId) ?? null;
   }, [tasks, selectedTaskId]);
 
   // タスクのフィルタリングを行うためのuseMemoフック
@@ -124,7 +126,7 @@ export default function WorkSpacePage() {
   };
 
   // APIからタスクを取得する関数
-  const fetchTodos = async () => {
+  const fetchTodos = async (): Promise<Task[]> => {
     try {
       setMessage("タスクを取得しています...");
 
@@ -138,39 +140,63 @@ export default function WorkSpacePage() {
 
       setTasks(mappedTasks);
       setSelectedTaskId(mappedTasks[0]?.id ?? null);
+
       setMessage(
         mappedTasks.length
           ? "当月のタスクを取得しました。"
           : "当月のタスクはありません。",
       );
+
+      return mappedTasks;
     } catch (err) {
       console.error("fetch todos failed:", err);
       setMessage(
         err instanceof Error ? err.message : "タスクの取得に失敗しました。",
       );
+      return [];
     }
   };
 
-  const fetchActiveWorkSession = async () => {
+  const fetchActiveWorkSession = async (currentTasks: Task[]) => {
     try {
       const data = await fetchActiveWorkSessionApi();
 
       if (!data.activeSession) {
+        stopTimer();
+        setCurrentWorkSessionId(null);
         return;
       }
 
       const activeSession = data.activeSession;
+      const activeTaskId = String(activeSession.todo_id);
 
-      setSelectedTaskId(String(activeSession.todo_id));
+      const existsInTasks = currentTasks.some(
+        (task) => task.id === activeTaskId,
+      );
+
+      if (!existsInTasks) {
+        stopTimer();
+        setCurrentWorkSessionId(null);
+        setSelectedTaskId(currentTasks[0]?.id ?? null);
+        return;
+      }
+
+      setSelectedTaskId(activeTaskId);
       setCurrentWorkSessionId(activeSession.work_session_id);
 
-      const startedAt = new Date(activeSession.started_at).getTime();
-      const now = Date.now();
-      const elapsed = Math.floor((now - startedAt) / 1000);
+      const startedAt = new Date(
+        activeSession.started_at.replace("Z", ""),
+      ).getTime();
 
+      const elapsed = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
+
+      console.log("elapsed:", elapsed);
       startTimer(elapsed);
 
       setMessage("作業中のタスクを復元しました。");
+      console.log(activeSession.started_at);
+      console.log(new Date(activeSession.started_at));
+      console.log(Date.now());
     } catch (err) {
       console.error("fetch active work session failed:", err);
       setMessage(
@@ -184,9 +210,9 @@ export default function WorkSpacePage() {
   // コンポーネントの初回レンダリング時にタスクと作業履歴を取得するためのuseEffectフック
   useEffect(() => {
     const initialize = async () => {
-      await fetchTodos();
+      const currentTasks = await fetchTodos();
       await fetchWorkHistories();
-      await fetchActiveWorkSession();
+      await fetchActiveWorkSession(currentTasks);
     };
 
     initialize();
@@ -236,6 +262,10 @@ export default function WorkSpacePage() {
 
     if (!formDueAt) {
       setSubmitError("期限日時は必須です。");
+      return;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(formDueAt)) {
+      setSubmitError("期限日時は年4桁で入力してください。");
       return;
     }
 

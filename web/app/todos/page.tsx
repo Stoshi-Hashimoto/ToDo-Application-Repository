@@ -138,6 +138,11 @@ export default function TodosPage() {
       return;
     }
 
+    if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(formDueAt)) {
+      setSubmitError("期限日時は年4桁で入力してください。");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       setSubmitError("");
