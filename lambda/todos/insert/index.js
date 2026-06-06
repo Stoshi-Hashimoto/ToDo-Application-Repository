@@ -52,7 +52,7 @@ exports.handler = async (event) => {
         $1,
         $2,
         $3,
-        ($4::timestamp AT TIME ZONE 'Asia/Tokyo'),
+        $4::timestamp,
         $5,
         CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo',
         CURRENT_TIMESTAMP AT TIME ZONE 'Asia/Tokyo'
