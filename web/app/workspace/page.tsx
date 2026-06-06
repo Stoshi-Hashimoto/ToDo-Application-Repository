@@ -184,10 +184,7 @@ export default function WorkSpacePage() {
       setSelectedTaskId(activeTaskId);
       setCurrentWorkSessionId(activeSession.work_session_id);
 
-      const startedAt = new Date(
-        activeSession.started_at.replace("Z", ""),
-      ).getTime();
-
+      const startedAt = new Date(activeSession.started_at).getTime();
       const elapsed = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
 
       console.log("elapsed:", elapsed);

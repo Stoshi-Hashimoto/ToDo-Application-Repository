@@ -5,6 +5,7 @@
  */
 import type {
   TodoApiResponse,
+  WorkHistory,
   WorkHistoryApiResponse,
   ActiveWorkSession,
 } from "./types";
@@ -39,6 +40,8 @@ const parseJsonResponse = async (response: Response) => {
   const data = await response.json();
 
   if (!response.ok) {
+    console.error("API error status:", response.status);
+    console.error("API error data:", data);
     throw new Error(data.message || `HTTP error! status: ${response.status}`);
   }
 
@@ -147,9 +150,29 @@ export const saveWorkMemoApi = async (params: {
 };
 
 // ワーク履歴を取得するAPI呼び出し
-export const fetchWorkHistoriesApi = async (): Promise<
-  WorkHistoryApiResponse[]
-> => {
+const formatSecondsToTime = (seconds: number | null) => {
+  if (seconds === null || !Number.isFinite(seconds)) return "作業中";
+
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  const pad = (value: number) => String(value).padStart(2, "0");
+
+  return `${pad(hours)}:${pad(minutes)}:${pad(secs)}`;
+};
+
+const formatHistoryTime = (dateString: string | null) => {
+  if (!dateString) return "-";
+
+  return new Date(dateString).toLocaleTimeString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+};
+
+export const fetchWorkHistoriesApi = async (): Promise<WorkHistory[]> => {
   const apiBase = getApiBase();
 
   const response = await fetch(`${apiBase}/todo-work-sessions`, {

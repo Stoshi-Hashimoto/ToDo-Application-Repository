@@ -12,15 +12,6 @@ type Props = {
   histories: WorkHistory[];
 };
 
-// "HH:MM"形式の時間を秒に変換する関数
-const parseTimeToSeconds = (time: string) => {
-  const [hour, minute] = time.split(":").map((value) => Number(value));
-  return (
-    (Number.isFinite(hour) ? hour : 0) * 3600 +
-    (Number.isFinite(minute) ? minute : 0) * 60
-  );
-};
-
 // 秒を"HH:MM:SS"形式に変換する関数
 const formatSecondsToTime = (seconds: number) => {
   const hours = Math.floor(seconds / 3600);
@@ -30,14 +21,12 @@ const formatSecondsToTime = (seconds: number) => {
   return `${pad(hours)}:${pad(minutes)}:${pad(secs)}`;
 };
 
-// 作業履歴リストコンポーネント
 export default function WorkHistoryList({ styles, histories }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const totalWorkTime = useMemo(() => {
     const totalSeconds = histories.reduce((acc, history) => {
-      const startSeconds = parseTimeToSeconds(history.startTime);
-      const endSeconds = parseTimeToSeconds(history.endTime);
-      return acc + Math.max(endSeconds - startSeconds, 0);
+      return acc + (history.durationSeconds ?? 0);
     }, 0);
 
     return formatSecondsToTime(totalSeconds);

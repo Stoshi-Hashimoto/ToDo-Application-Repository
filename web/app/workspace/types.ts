@@ -20,16 +20,17 @@ export type WorkHistory = {
   workTime: string;
   startTime: string;
   endTime: string;
+  durationSeconds: number | null;
   memo: string;
 };
 
 // APIレスポンスの型定義
 export type WorkHistoryApiResponse = {
   id: number;
-  taskName: string;
-  workTime: string;
-  startTime: string;
-  endTime: string;
+  task_name: string;
+  started_at: string;
+  ended_at: string | null;
+  duration_seconds: number | null;
   memo: string;
 };
 
