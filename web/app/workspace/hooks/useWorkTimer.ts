@@ -25,9 +25,9 @@ export const useWorkTimer = () => {
     };
   }, [isWorking]);
 
-  const startTimer = () => {
+  const startTimer = (initialSeconds = 0) => {
+    setElapsedSeconds(initialSeconds);
     setIsWorking(true);
-    setElapsedSeconds(0);
   };
 
   const pauseTimer = () => {

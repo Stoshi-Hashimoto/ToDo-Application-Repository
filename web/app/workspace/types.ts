@@ -43,4 +43,12 @@ export type TodoApiResponse = {
   deleted_at?: string | null;
 };
 
+// 作業中のタスクを取得する型定義
+export type ActiveWorkSession = {
+  work_session_id: number;
+  todo_id: number;
+  started_at: string;
+  title: string;
+};
+
 export type FilterStatus = "ALL" | TaskStatus;

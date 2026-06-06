@@ -35,6 +35,15 @@ export function buildMonthCalendar(baseDate: Date): CalendarCell[] {
   return cells;
 }
 
+export function parseDbTimestampAsLocal(dateString: string): Date {
+  const normalized = dateString.replace("T", " ").replace("Z", "");
+  const [datePart, timePart = "00:00:00"] = normalized.split(" ");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split(":").map(Number);
+
+  return new Date(year, month - 1, day, hour, minute, second || 0);
+}
+
 // 日付文字列をJSTの年月日形式のキーに変換する関数
 export function toJstDateKey(dateString: string): string {
   const formatter = new Intl.DateTimeFormat("ja-JP", {
@@ -44,7 +53,7 @@ export function toJstDateKey(dateString: string): string {
     day: "2-digit",
   });
 
-  const parts = formatter.formatToParts(new Date(dateString));
+  const parts = formatter.formatToParts(parseDbTimestampAsLocal(dateString));
   const year = parts.find((p) => p.type === "year")?.value ?? "";
   const month = parts.find((p) => p.type === "month")?.value ?? "";
   const day = parts.find((p) => p.type === "day")?.value ?? "";
@@ -75,10 +84,9 @@ export function formatMonthDayLabel(date: Date): string {
 export function formatDueTime(dueAt: string | null): string {
   if (!dueAt) return "時刻未設定";
 
-  const date = new Date(dueAt);
+  const date = parseDbTimestampAsLocal(dueAt);
 
   return new Intl.DateTimeFormat("ja-JP", {
-    timeZone: JST_TIME_ZONE,
     hour: "numeric",
     minute: "2-digit",
   }).format(date);

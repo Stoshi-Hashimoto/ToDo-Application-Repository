@@ -15,6 +15,7 @@ import { getTodayText, isTodayTodo, mapTodoToTask } from "./utils";
 import {
   createTodoApi,
   endWorkSessionApi,
+  fetchActiveWorkSessionApi,
   fetchTodosApi,
   fetchWorkHistoriesApi,
   saveWorkMemoApi,
@@ -150,10 +151,45 @@ export default function WorkSpacePage() {
     }
   };
 
+  const fetchActiveWorkSession = async () => {
+    try {
+      const data = await fetchActiveWorkSessionApi();
+
+      if (!data.activeSession) {
+        return;
+      }
+
+      const activeSession = data.activeSession;
+
+      setSelectedTaskId(String(activeSession.todo_id));
+      setCurrentWorkSessionId(activeSession.work_session_id);
+
+      const startedAt = new Date(activeSession.started_at).getTime();
+      const now = Date.now();
+      const elapsed = Math.floor((now - startedAt) / 1000);
+
+      startTimer(elapsed);
+
+      setMessage("作業中のタスクを復元しました。");
+    } catch (err) {
+      console.error("fetch active work session failed:", err);
+      setMessage(
+        err instanceof Error
+          ? err.message
+          : "作業中セッションの取得に失敗しました。",
+      );
+    }
+  };
+
   // コンポーネントの初回レンダリング時にタスクと作業履歴を取得するためのuseEffectフック
   useEffect(() => {
-    fetchTodos();
-    fetchWorkHistories();
+    const initialize = async () => {
+      await fetchTodos();
+      await fetchWorkHistories();
+      await fetchActiveWorkSession();
+    };
+
+    initialize();
   }, []);
 
   // タスクの状態に応じたクラス名を返す関数
@@ -336,6 +372,7 @@ export default function WorkSpacePage() {
       const data = await endWorkSessionApi(Number(selectedTask.id));
 
       stopTimer();
+      setCurrentWorkSessionId(null);
 
       setTasks((prev) =>
         prev.map((task) =>

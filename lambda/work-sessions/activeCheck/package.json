@@ -1,0 +1,17 @@
+{
+  "name": "lambda-todo-update",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@aws-sdk/client-ssm": "3.1058.0",
+    "pg": "^8.20.0"
+  }
+}

@@ -3,7 +3,11 @@
  * タスク管理アプリのワークスペース機能に関連するAPI呼び出しを提供するモジュール
  * - タスクの取得、作成、更新、削除など、ワークスペース内で必要なAPIエンドポイントへのリクエストを定義
  */
-import type { TodoApiResponse, WorkHistoryApiResponse } from "./types";
+import type {
+  TodoApiResponse,
+  WorkHistoryApiResponse,
+  ActiveWorkSession,
+} from "./types";
 
 // API呼び出しに必要な共通のヘッダーを取得する関数
 const getAuthHeaders = () => {
@@ -54,6 +58,20 @@ export const fetchTodosApi = async (): Promise<TodoApiResponse[]> => {
   const data = await parseJsonResponse(response);
 
   return data.todos || [];
+};
+
+export const fetchActiveWorkSessionApi = async (): Promise<{
+  activeSession: ActiveWorkSession | null;
+}> => {
+  const apiBase = getApiBase();
+
+  const response = await fetch(`${apiBase}/todo-work-sessions/activeCheck`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+
+  return parseJsonResponse(response);
 };
 
 // タスクを作成するAPI呼び出し
