@@ -7,7 +7,7 @@
   "lambda/work-sessions/start": "worksession-start",
   "lambda/work-sessions/end": "worksession-end",
   "lambda/work-sessions/get": "worksession-get",
-  "lambda/work-sessions/activeCheck": "worksession-active-check",
+  "lambda/work-sessions/activeCheck": "worksession-activeCheck",
   "lambda/work-notes/get": "worknote-get",
   "lambda/work-notes/regist": "worknote-regist"
 }
