@@ -206,7 +206,7 @@ DB接続情報などの機密情報を安全に管理するため採用しまし
 
 ### ▪ システム構成図
 
-![Architecture](docs\architecture\architecture.png)
+![Architecture](docs/architecture/architecture.png)
 
 ### ▪ 構成概要
 
